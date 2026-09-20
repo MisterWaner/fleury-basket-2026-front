@@ -1,7 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Schedules from "@/components/Schedules/Schedules";
 ---
 
 <Layout>
-    Page du calendrier
+    <main>
+        <Schedules client:load/>
+    </main>
 </Layout>

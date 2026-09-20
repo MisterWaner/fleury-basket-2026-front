@@ -61,7 +61,7 @@ function Header() {
                             <a
                                 key={link.name}
                                 href={link.href}
-                                className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-gray-700 hover:text-club-dark hover:bg-club-pink/60 rounded-md transition-all whitespace-nowrap"
+                                className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-gray-700 hover:text-club-dark hover:bg-club-pink/60 rounded-md transition-all whitespace-nowrap hover:bg-pink-fleury"
                             >
                                 <Icon className="h-4 w-4 text-gray-fleury shrink-0" />
                                 <span>{link.name}</span>
