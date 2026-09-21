@@ -4,7 +4,7 @@ export interface Article {
     slug: string;
     excerpt: string;
     date: string;
-    category: 'Club' | 'Stage' | 'Compétition' | 'Événement';
+    category: 'Vie du club' | 'Résultats' | 'Stage' | 'Compétition' | 'Événement' | 'Tournois';
     author: string;
     imageUrl?: string;
     featured?: boolean;

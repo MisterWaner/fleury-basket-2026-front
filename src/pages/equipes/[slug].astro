@@ -1,0 +1,21 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import TeamDetailPage from '@/components/Teams/TeamDetailPage';
+
+export function getStaticPaths() {{}
+    return [
+        {params: { slug: 'seniors-garcons'}},
+        {params: { slug: 'u13-garcons'}},
+        {params: { slug: 'u11-mixtes'}},
+        {params: { slug: 'u9-mixtes'}},
+        {params: { slug: 'u7-mixtes'}},
+    ]
+}
+
+const { slug } = Astro.params;
+---
+<Layout>
+    <main>
+        <TeamDetailPage client:load />
+    </main>
+</Layout>

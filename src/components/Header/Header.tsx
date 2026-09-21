@@ -55,14 +55,14 @@ function Header() {
                 </a>
 
                 {/* --- NAVIGATION DESKTOP (Bascule sur lg: 1024px au lieu de md:) --- */}
-                <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+                <nav className="hidden xl:flex items-center gap-0.5 2xl:gap-1.5">
                     {navLinks.map((link) => {
                         const Icon = link.icon;
                         return (
                             <a
                                 key={link.name}
                                 href={link.href}
-                                className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-gray-700 hover:text-club-dark hover:bg-club-pink/60 rounded-md transition-all whitespace-nowrap hover:bg-pink-fleury"
+                                className="flex items-center gap-1.5 px-2.5 2xl:px-3 py-2 2xl:text-sm font-semibold text-gray-700 hover:text-club-dark hover:bg-club-pink/60 rounded-md transition-all whitespace-nowrap hover:bg-pink-fleury"
                             >
                                 <Icon className="h-4 w-4 text-gray-fleury shrink-0" />
                                 <span>{link.name}</span>
@@ -71,19 +71,20 @@ function Header() {
                     })}
                 </nav>
 
-                {/* --- BOUTON D'ACTION DESKTOP (Bascule sur lg: 1024px) --- */}
-                <div className="hidden lg:flex items-center shrink-0">
+                {/* --- BOUTON D'ACTION DESKTOP (Bascule sur xl: 1280px) --- */}
+                <div className="hidden xl:flex items-center shrink-0">
                     <Button
                         variant="default"
-                        className="bg-pink-fleury hover:bg-pink-fleury/80 text-black-fleury font-bold border border-gray-fleury/40 shadow-xs whitespace-nowrap"
+                        className="bg-pink-fleury hover:bg-pink-fleury/80 text-black-fleury font-bold border border-gray-fleury/40 shadow-xs whitespace-nowrap text-xs 2xl:text-sm px-3 2xl:px-4"
                         render={<a href="/rejoindre" />}
                     >
-                        Rejoindre le club
+                        <span>Rejoindre</span>
+                        <span className="hidden 2xl:inline">le club</span>
                     </Button>
                 </div>
 
-                {/* --- MENU MOBILE & TABLETTE (Affiché jusqu'à lg: 1024px) --- */}
-                <div className="flex lg:hidden">
+                {/* --- MENU MOBILE & TABLETTE (Affiché jusqu'à xl: 1280px) --- */}
+                <div className="flex xl:hidden">
                     <Sheet open={isOpen} onOpenChange={setIsOpen}>
                         <SheetTrigger
                             render={
@@ -138,9 +139,12 @@ function Header() {
                                 <Button
                                     className="w-full bg-pink-fleury hover:bg-pink-fleury/80 text-black-fleury font-bold border border-gray-fleury/30 shadow-xs"
                                     onClick={() => setIsOpen(false)}
-                                    render={<a href="/rejoindre" >Rejoindre le club</a>}
+                                    render={
+                                        <a href="/rejoindre">
+                                            Rejoindre le club
+                                        </a>
+                                    }
                                 />
-                                    
                             </div>
                         </SheetContent>
                     </Sheet>

@@ -1,0 +1,19 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import NewsDetailPage from '@/components/News/NewsDetailPage/NewsDetailPage';
+
+export function getStaticPaths() {{}
+    return [
+        {params: { slug: 'victoire-seniors-garcons'}},
+        {params: { slug: 'stage-basket-paques-2026'}},
+        {params: { slug: 'tournois-3x3-printemps'}},
+    ]
+}
+
+const { slug } = Astro.params;
+---
+<Layout>
+    <main>
+        <NewsDetailPage client:load />
+    </main>
+</Layout>

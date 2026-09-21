@@ -4,33 +4,24 @@ import {
     Clock,
     MapPin,
     User,
+    ChevronRight,
     Calendar,
     Shield,
     ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-export interface Team {
-    id: string;
-    name: string;
-    category: string;
-    ageGroup: string;
-    coach: string;
-    schedule: string[];
-    location: string;
-    description: string;
-    isRecruiting: boolean;
-}
+import type { Team } from "@/types/teams";
 
 const teamsData: Team[] = [
     {
         id: "seniors-d3",
+        slug: "seniors-garcons",
         name: "Seniors Masculins D3",
         category: "Seniors",
         ageGroup: "18 ans et plus",
         coach: "Entraîneur diplômé",
-        schedule: ["Mardi : 20h00 - 22h00", "Jeudi : 20h30 - 22h00"],
+        schedule: ["Mercredi : 21h30 - 23h00", "Vendredi : 21h00 - 22h30"],
         location: "Gymnase Auguste Delaune",
         description:
             "Équipe fanion compétition. Rigueur, esprit d'équipe et ambition dans le championnat départemental.",
@@ -39,6 +30,7 @@ const teamsData: Team[] = [
     {
         id: "u13",
         name: "Équipe U13",
+        slug: "u13-garcons",
         category: "Jeunes",
         ageGroup: "Nés en 2014 - 2015",
         coach: "Staff Jeunes",
@@ -51,6 +43,7 @@ const teamsData: Team[] = [
     {
         id: "u11",
         name: "Équipe U11",
+        slug: "u11-mixtes",
         category: "Jeunes",
         ageGroup: "Nés en 2016 - 2017",
         coach: "Educateur diplômé",
@@ -63,6 +56,7 @@ const teamsData: Team[] = [
     {
         id: "u7-u9",
         name: "École de Basket (U7 - U9)",
+        slug: "u7-u9",
         category: "Mini-Basket",
         ageGroup: "Nés de 2018 à 2021",
         coach: "Équipe d'animation Jeunes",
@@ -216,6 +210,14 @@ function TeamsPage() {
                                     <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                                 </Button>
                             </div>
+                            {/* Bouton vers la fiche détaillée */}
+                            <a
+                                href={`/equipes/${team.slug}`}
+                                className="w-full py-2.5 bg-slate-100 hover:bg-black-fleury hover:text-white text-black-fleury font-bold rounded-xl text-xs transition-all duration-200 flex items-center justify-center gap-1.5 mt-4"
+                            >
+                                <span>Voir la fiche équipe & classement</span>
+                                <ChevronRight className="h-4 w-4" />
+                            </a>
                         </div>
                     ))}
                 </div>
@@ -225,4 +227,5 @@ function TeamsPage() {
 }
 
 export default TeamsPage;
+
 
