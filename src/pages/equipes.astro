@@ -1,7 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import TeamsPage from "@/components/TeamsPage/TeamsPage"
 ---
 
 <Layout>
-    Page des équipes
+    <main>
+        <TeamsPage client:load/>
+    </main>
 </Layout>

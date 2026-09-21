@@ -1,7 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import InscriptionsPage from "@/components/InscriptionsPage/InscriptionsPage";
 ---
 
 <Layout>
-    Page pour rejoindre le club
+
+    <main>
+        <InscriptionsPage client:load/>
+    </main>
 </Layout>

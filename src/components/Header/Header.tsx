@@ -24,6 +24,7 @@ const navLinks: { name: string; href: string; icon: LucideIcon }[] = [
     { name: "Calendrier & Matchs", href: "/calendrier", icon: Calendar },
     { name: "Actualités", href: "/actualites", icon: Newspaper },
     { name: "Contact", href: "/contact", icon: Mail },
+    { name: "Nos Partenaires", href: "/nos-partenaires", icon: Trophy },
 ];
 
 function Header() {

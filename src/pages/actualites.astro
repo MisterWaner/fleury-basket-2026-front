@@ -1,7 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import NewsPage from "../components/News/NewsPage/NewsPage"; 
 ---
 
 <Layout>
-    Page des actualités
+    <main>
+        <NewsPage client:load/>
+    </main>
 </Layout>
