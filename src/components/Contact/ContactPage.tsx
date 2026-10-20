@@ -56,7 +56,7 @@ function ContactPage() {
     const toggleFaq = (index: number) => {
         setOpenFaqIndex(openFaqIndex === index ? null : index);
     };
-    
+
     return (
         <div className="bg-slate-50 min-h-screen py-8 sm:py-12">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -99,7 +99,7 @@ function ContactPage() {
                                             Gymnase Auguste Delaune
                                         </h3>
                                         <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
-                                            Rue Serge Reggiani
+                                            19 rue François Mitterrand
                                             <br />
                                             14123 Fleury-sur-Orne
                                         </p>
@@ -116,10 +116,10 @@ function ContactPage() {
                                             Adresse email
                                         </h3>
                                         <a
-                                            href="mailto:contact@fleurybasket.fr"
+                                            href="mailto:fso.basket@gmail.com"
                                             className="text-gray-600 hover:text-pink-fleury text-xs sm:text-sm font-medium transition-colors"
                                         >
-                                            contact@fleurybasket.fr
+                                            fso.basket@gmail.com
                                         </a>
                                     </div>
                                 </div>
@@ -134,7 +134,7 @@ function ContactPage() {
                                             Téléphone / Secrétariat
                                         </h3>
                                         <p className="text-gray-600 text-xs sm:text-sm">
-                                            02 31 XX XX XX
+                                            06 51 69 97 22
                                         </p>
                                         <span className="text-[11px] text-gray-400">
                                             Joignable les jours d'entraînement
@@ -152,9 +152,15 @@ function ContactPage() {
                                             Créneaux d'entraînement
                                         </h3>
                                         <p className="text-gray-600 text-xs sm:text-sm">
-                                            Du Lundi au Vendredi : 17h30 - 22h30
+                                            Mardi : 17h30 - 20h00 (U7 / U9 / U11 / U13)
                                             <br />
-                                            Samedi (Matchs) : 09h00 - 19h00
+                                            Mercredi : 16h00 - 17h30 et 21h30 - 23h00 (U7 / U9 / U11 / Seniors)
+                                            <br />
+                                            Vendredi : 20h00 - 22h30 (U13 / Seniors)
+                                            <br />
+                                            Samedi (Matchs) : 09h00 - 19h00 (Jeunes)
+                                            <br />
+                                            Dimanche (Matchs) : 09h00 - 12h00 (Seniors)
                                         </p>
                                     </div>
                                 </div>
@@ -414,9 +420,4 @@ function ContactPage() {
 }
 
 export default ContactPage;
-
-
-
-
-
 

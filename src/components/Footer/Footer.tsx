@@ -135,7 +135,7 @@ function Footer() {
                                     <strong className="block text-white">
                                         Gymnase Auguste Delaune
                                     </strong>
-                                    Rue François Mitterrand
+                                    19 Rue François Mitterrand
                                     <br />
                                     14123 Fleury-sur-Orne
                                 </span>
@@ -159,20 +159,20 @@ function Footer() {
                         <ul className="space-y-3 text-sm text-gray-300">
                             <li>
                                 <a
-                                    href="mailto:contact@fleurybasket.fr"
+                                    href="mailto:fso.basket@gmail.com"
                                     className="flex items-center gap-2.5 hover:text-pink-fleury transition-colors"
                                 >
                                     <Mail className="h-4 w-4 text-pink-fleury shrink-0" />
-                                    <span>contact@fleurybasket.fr</span>
+                                    <span>fso.basket@gmail.com</span>
                                 </a>
                             </li>
                             <li>
                                 <a
-                                    href="tel:0200000000"
+                                    href="tel:0651699722"
                                     className="flex items-center gap-2.5 hover:text-pink-fleury transition-colors"
                                 >
                                     <Phone className="h-4 w-4 text-pink-fleury shrink-0" />
-                                    <span>02 00 00 00 00</span>
+                                    <span>06 51 69 97 22</span>
                                 </a>
                             </li>
                         </ul>
