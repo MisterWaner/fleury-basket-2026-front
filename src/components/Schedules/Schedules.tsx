@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useMatches } from "@/hooks/useMatches";
+import type { TeamCategory } from "@/types/teamCategory";
+import PocketBase from "pocketbase";
 import {
     Calendar as CalendarIcon,
     MapPin,
@@ -11,87 +14,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-// Types d'équipes du club
-type TeamCategory = "Tous" | "Seniors D3" | "U13" | "U11" | "U9" | "U7";
-
-interface Match {
-    id: string;
-    category: TeamCategory;
-    homeTeam: string;
-    awayTeam: string;
-    date: string;
-    time: string;
-    location: string;
-    isHome: boolean;
-    status: "upcoming" | "completed";
-    scoreHome?: number;
-    scoreAway?: number;
-}
-
-// Données statiques pour la maquette UI
-const mockMatches: Match[] = [
-    // Matchs à venir
-    {
-        id: "1",
-        category: "Seniors D3",
-        homeTeam: "Fleury Basket",
-        awayTeam: "Caen Basket Calvados",
-        date: "Samedi 26 Septembre 2026",
-        time: "20:30",
-        location: "Gymnase Auguste Delaune, Fleury",
-        isHome: true,
-        status: "upcoming",
-    },
-    {
-        id: "2",
-        category: "U13",
-        homeTeam: "LCBO Basket",
-        awayTeam: "Fleury Basket",
-        date: "Samedi 26 Septembre 2026",
-        time: "14:00",
-        location: "Gymnase Municipal, Louvigny",
-        isHome: false,
-        status: "upcoming",
-    },
-    {
-        id: "3",
-        category: "U11",
-        homeTeam: "Fleury Basket",
-        awayTeam: "USM Blainville",
-        date: "Dimanche 27 Septembre 2026",
-        time: "10:30",
-        location: "Gymnase Auguste Delaune, Fleury",
-        isHome: true,
-        status: "upcoming",
-    },
-    // Derniers Résultats
-    {
-        id: "4",
-        category: "Seniors D3",
-        homeTeam: "Hérouville Basket",
-        awayTeam: "Fleury Basket",
-        date: "Samedi 19 Septembre 2026",
-        time: "20:00",
-        location: "Gymnase Allois, Hérouville",
-        isHome: false,
-        status: "completed",
-        scoreHome: 58,
-        scoreAway: 64,
-    },
-    {
-        id: "5",
-        category: "U13",
-        homeTeam: "Fleury Basket",
-        awayTeam: "ASPTT Caen",
-        date: "Samedi 19 Septembre 2026",
-        time: "15:00",
-        location: "Gymnase Auguste Delaune, Fleury",
-        isHome: true,
-        status: "completed",
-        scoreHome: 42,
-        scoreAway: 38,
-    },
-];
+//Pocketbase
+const pb = new PocketBase(
+    import.meta.env.PUBLIC_POCKETBASE_URL || "http://127.0.0.1:8090",
+);
 
 const categories: TeamCategory[] = [
     "Tous",
@@ -103,6 +29,7 @@ const categories: TeamCategory[] = [
 ];
 
 function Schedules() {
+    const { matches, loading, error } = useMatches();
     const [selectedCategory, setSelectedCategory] =
         useState<TeamCategory>("Tous");
     const [activeTab, setActiveTab] = useState<"upcoming" | "completed">(
@@ -110,7 +37,7 @@ function Schedules() {
     );
 
     //Filtrage des matchs
-    const filteredMatches = mockMatches.filter((match) => {
+    const filteredMatches = matches.filter((match) => {
         const matchesCategory =
             selectedCategory === "Tous" || match.category === selectedCategory;
         const matchesStatus = match.status === activeTab;
@@ -184,16 +111,31 @@ function Schedules() {
                     </div>
                 </div>
 
-                {/* --- LISTE DES MATCHS --- */}
-                {filteredMatches.length > 0 ? (
+                {/* CHARGEMENT / ERREUR / LISTE */}
+                {loading ? (
+                    <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
+                        <div className="animate-spin h-8 w-8 border-4 border-pink-fleury border-t-transparent rounded-full mx-auto mb-4" />
+                        <p className="text-sm text-gray-500 font-medium">
+                            Chargement des données...
+                        </p>
+                    </div>
+                ) : error ? (
+                    <div className="bg-white rounded-2xl border border-red-200 p-12 text-center text-red-600 font-semibold">
+                        {error}
+                    </div>
+                ) : filteredMatches.length > 0 ? (
                     <div className="space-y-4">
                         {filteredMatches.map((match) => {
                             const isFleuryWinner =
                                 match.status === "completed" &&
-                                ((match.homeTeam.includes("Fleury") &&
+                                ((match.homeTeam
+                                    .toLowerCase()
+                                    .includes("fleury") &&
                                     (match.scoreHome ?? 0) >
                                         (match.scoreAway ?? 0)) ||
-                                    (match.awayTeam.includes("Fleury") &&
+                                    (match.awayTeam
+                                        .toLowerCase()
+                                        .includes("fleury") &&
                                         (match.scoreAway ?? 0) >
                                             (match.scoreHome ?? 0)));
 
@@ -202,12 +144,11 @@ function Schedules() {
                                     key={match.id}
                                     className="bg-white rounded-2xl border border-gray-200/90 p-5 sm:p-6 shadow-2xs hover:shadow-md transition-all flex flex-col lg:flex-row items-center justify-between gap-6"
                                 >
-                                    {/* Badge Catégorie & Date */}
                                     <div className="flex items-center gap-3 w-full lg:w-48 shrink-0">
                                         <Badge className="bg-pink-fleury/40 text-black-fleury font-bold border-none">
                                             {match.category}
                                         </Badge>
-                                        <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-500">
+                                        <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 capitalize">
                                             <CalendarIcon className="h-3.5 w-3.5 text-gray-fleury" />
                                             <span>
                                                 {match.date
@@ -218,12 +159,10 @@ function Schedules() {
                                         </div>
                                     </div>
 
-                                    {/* Panneau central : Affichage des équipes / Score */}
                                     <div className="flex items-center justify-center gap-4 sm:gap-8 w-full max-w-xl">
-                                        {/* Équipe Domicile */}
                                         <div className="flex-1 text-right">
                                             <span
-                                                className={`block font-extrabold text-sm sm:text-base ${match.homeTeam.includes("Fleury") ? "text-black-fleury" : "text-gray-700"}`}
+                                                className={`block font-extrabold text-sm sm:text-base ${match.homeTeam.toLowerCase().includes("fleury") ? "text-black-fleury" : "text-gray-700"}`}
                                             >
                                                 {match.homeTeam}
                                             </span>
@@ -234,7 +173,6 @@ function Schedules() {
                                             )}
                                         </div>
 
-                                        {/* Score ou Heure du match */}
                                         <div className="shrink-0 bg-slate-100 px-4 py-2 rounded-xl text-center min-w-22.5 border border-gray-200">
                                             {match.status === "completed" ? (
                                                 <div className="text-lg sm:text-xl font-black text-black-fleury tracking-tight">
@@ -249,10 +187,9 @@ function Schedules() {
                                             )}
                                         </div>
 
-                                        {/* Équipe Extérieur */}
                                         <div className="flex-1 text-left">
                                             <span
-                                                className={`block font-extrabold text-sm sm:text-base ${match.awayTeam.includes("Fleury") ? "text-black-fleury" : "text-gray-700"}`}
+                                                className={`block font-extrabold text-sm sm:text-base ${match.awayTeam.toLowerCase().includes("fleury") ? "text-black-fleury" : "text-gray-700"}`}
                                             >
                                                 {match.awayTeam}
                                             </span>
@@ -264,7 +201,6 @@ function Schedules() {
                                         </div>
                                     </div>
 
-                                    {/* Infos Lieu / Statut Victoire */}
                                     <div className="flex items-center justify-between lg:justify-end gap-4 w-full lg:w-64 pt-4 lg:pt-0 border-t lg:border-t-0 border-gray-100">
                                         <div className="flex items-center gap-1.5 text-xs text-gray-500 font-medium">
                                             <MapPin className="h-4 w-4 text-pink-fleury shrink-0" />
@@ -285,15 +221,14 @@ function Schedules() {
                         })}
                     </div>
                 ) : (
-                    /* État vide si aucun match ne correspond au filtre */
                     <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
                         <Trophy className="h-10 w-10 text-gray-300 mx-auto mb-3" />
                         <h3 className="text-lg font-bold text-black-fleury mb-1">
                             Aucun match trouvé
                         </h3>
                         <p className="text-sm text-gray-500 max-w-sm mx-auto">
-                            Aucune rencontre ne correspond au filtre sélectionné
-                            pour cette catégorie.
+                            Aucune rencontre ne correspond au filtre
+                            sélectionné.
                         </p>
                     </div>
                 )}

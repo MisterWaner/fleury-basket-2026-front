@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTeamDetails } from "@/hooks/useTeamDetails";
 import {
     Trophy,
     Users,
@@ -10,125 +11,45 @@ import {
     XCircle,
     Sparkles,
     UserCheck,
+    Loader2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { Player, Match, RankingItem } from "@/types/teams";
+import type { TeamDetailPageProps } from "@/types/teams";
+import type { Match } from "@/types/match";
+import type { RankingItem } from "@/types/ranking";
+import type { Player } from "@/types/player";
 
-function TeamDetailPage() {
+function TeamDetailPage({ teamId }: TeamDetailPageProps) {
     const [activeTab, setActiveTab] = useState<
         "overview" | "roster" | "matches" | "ranking"
     >("overview");
 
-    // Données de démonstration pour l'équipe (ex: Senior Garçons 1)
-    const team = {
-        name: "Seniors Garçons 1",
-        category: "Seniors",
-        division: "Départementale 3 (D3)",
-        coach: "Hugo Lebouc",
-        trainingSlots: [
-            {
-                day: "Mercredi",
-                time: "21h30 - 23h00",
-                location: "Gymnase Auguste Delaune",
-            },
-            {
-                day: "Vendredi",
-                time: "21h00 - 22h30",
-                location: "Gymnase Auguste Delaune",
-            },
-        ],
-        roster: [
-            { number: 4, name: "Lucas Martin", position: "Meneur" },
-            { number: 6, name: "Thomas Bernard", position: "Arrière" },
-            { number: 8, name: "Antoine Petit", position: "Ailier" },
-            { number: 10, name: "Alexandre Roux", position: "Ailier Fort" },
-            { number: 12, name: "Nicolas Moreau", position: "Pivot" },
-            { number: 14, name: "Maxime Girard", position: "Meneur" },
-            { number: 15, name: "David Lefebvre", position: "Pivot" },
-        ] as Player[],
-        recentMatches: [
-            {
-                id: "1",
-                opponent: "Caen BC 2",
-                date: "14/03/2026",
-                time: "20:30",
-                isHome: true,
-                scoreHome: 78,
-                scoreAway: 72,
-                status: "played",
-            },
-            {
-                id: "2",
-                opponent: "ASPTT Caen",
-                date: "07/03/2026",
-                time: "20:00",
-                isHome: false,
-                scoreHome: 65,
-                scoreAway: 70,
-                status: "played",
-            },
-            {
-                id: "3",
-                opponent: "LCBO Ouistreham",
-                date: "28/03/2026",
-                time: "20:30",
-                isHome: true,
-                status: "upcoming",
-            },
-            {
-                id: "4",
-                opponent: "Bayeux Basket",
-                date: "04/04/2026",
-                time: "20:30",
-                isHome: false,
-                status: "upcoming",
-            },
-        ] as Match[],
-        ranking: [
-            {
-                position: 1,
-                team: "Caen Nord Basket",
-                played: 14,
-                won: 12,
-                lost: 2,
-                points: 26,
-            },
-            {
-                position: 2,
-                team: "Fleury Basket",
-                played: 14,
-                won: 10,
-                lost: 4,
-                points: 24,
-                isCurrentTeam: true,
-            },
-            {
-                position: 3,
-                team: "Caen BC 2",
-                played: 14,
-                won: 9,
-                lost: 5,
-                points: 23,
-            },
-            {
-                position: 4,
-                team: "ASPTT Caen",
-                played: 14,
-                won: 8,
-                lost: 6,
-                points: 22,
-            },
-            {
-                position: 5,
-                team: "LCBO Ouistreham",
-                played: 14,
-                won: 5,
-                lost: 9,
-                points: 19,
-            },
-        ] as RankingItem[],
-    };
+    const { team, loading, error } = useTeamDetails(teamId);
+
+    if (loading) {
+        return (
+            <div className="min-h-[60vh] flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-pink-fleury" />
+            </div>
+        );
+    }
+
+    if (error || !team) {
+        return (
+            <div className="container mx-auto px-4 py-16 text-center">
+                <p className="text-rose-600 font-bold mb-4">
+                    {error || "Équipe introuvable."}
+                </p>
+                <a
+                    href="/equipes"
+                    className="text-xs font-bold text-gray-500 hover:underline"
+                >
+                    Retour aux équipes
+                </a>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-slate-50 min-h-screen py-8 sm:py-12">
@@ -284,7 +205,7 @@ function TeamDetailPage() {
                                                 </div>
                                             </div>
 
-                                            {m.status === "played" ? (
+                                            {m.status === "completed" ? (
                                                 <div className="text-right">
                                                     <span
                                                         className={`text-base font-black ${
@@ -359,32 +280,52 @@ function TeamDetailPage() {
                             Calendrier complet de la saison
                         </h2>
                         <div className="space-y-3">
-                            {team.recentMatches.map((m) => (
-                                <div
-                                    key={m.id}
-                                    className="p-4 rounded-2xl border border-gray-100 flex items-center justify-between"
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <span className="text-xs font-bold text-gray-400 w-20">
-                                            {m.date}
-                                        </span>
-                                        <span className="font-bold text-black-fleury text-sm">
-                                            {m.isHome
-                                                ? `vs ${m.opponent}`
-                                                : `@ ${m.opponent}`}
-                                        </span>
-                                    </div>
-                                    {m.status === "played" ? (
-                                        <span className="font-black text-sm">
-                                            {m.scoreHome} - {m.scoreAway}
-                                        </span>
-                                    ) : (
-                                        <span className="text-xs text-gray-400 font-medium">
-                                            {m.time}
-                                        </span>
-                                    )}
-                                </div>
-                            ))}
+                            {team.allMatches.map((m) =>
+                                (() => {
+                                    const isCompleted =
+                                        m.status === "completed" &&
+                                        m.scoreHome !== undefined &&
+                                        m.scoreAway !== undefined;
+                                    const isWin = m.isHome
+                                        ? (m.scoreHome ?? 0) >
+                                          (m.scoreAway ?? 0)
+                                        : (m.scoreAway ?? 0) >
+                                          (m.scoreHome ?? 0);
+                                    return (
+                                        <div
+                                            key={m.id}
+                                            className="p-4 rounded-2xl border border-gray-100 flex items-center justify-between"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <span className="text-xs font-bold text-gray-400 w-20">
+                                                    {m.date}
+                                                </span>
+                                                <span className="font-bold text-black-fleury text-sm">
+                                                    {m.isHome
+                                                        ? `vs ${m.opponent}`
+                                                        : `@ ${m.opponent}`}
+                                                </span>
+                                            </div>
+                                            {isCompleted ? (
+                                                <div
+                                                    className={`font-black text-xs px-3 py-1.5 rounded-xl border ${
+                                                        isWin
+                                                            ? "bg-emerald-100 text-emerald-800 border-emerald-200"
+                                                            : "bg-rose-100 text-rose-800 border-rose-200"
+                                                    }`}
+                                                >
+                                                    {m.scoreHome} -{" "}
+                                                    {m.scoreAway}
+                                                </div>
+                                            ) : (
+                                                <span className="text-xs bg-pink-50 text-black-fleury font-bold px-2.5 py-1 rounded-md">
+                                                    {m.time || "À venir"}
+                                                </span>
+                                            )}
+                                        </div>
+                                    );
+                                })(),
+                            )}
                         </div>
                     </div>
                 )}
@@ -463,4 +404,5 @@ function TeamDetailPage() {
 }
 
 export default TeamDetailPage;
+
 
