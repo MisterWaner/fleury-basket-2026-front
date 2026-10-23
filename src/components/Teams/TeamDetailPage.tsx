@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTeamDetails } from "@/hooks/useTeamDetails";
+import { useRanking } from "@/hooks/useRanking";
 import {
     Trophy,
     Users,
@@ -26,6 +27,11 @@ function TeamDetailPage({ teamId }: TeamDetailPageProps) {
     >("overview");
 
     const { team, loading, error } = useTeamDetails(teamId);
+    const {
+        ranking,
+        loading: rankingLoading,
+        error: rankingError,
+    } = useRanking(teamId);
 
     if (loading) {
         return (
@@ -335,67 +341,99 @@ function TeamDetailPage({ teamId }: TeamDetailPageProps) {
                     <div className="bg-white rounded-3xl border border-gray-200/90 p-6 sm:p-8 shadow-2xs">
                         <h2 className="text-xl font-extrabold text-black-fleury mb-6 flex items-center gap-2">
                             <Trophy className="h-5 w-5 text-pink-fleury" />
-                            Classement Départementale 3 (Poule B)
+                            {`Classement ${team.name}`}
                         </h2>
 
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left text-xs sm:text-sm">
-                                <thead>
-                                    <tr className="border-b border-gray-200 text-gray-400 uppercase text-[10px] tracking-wider">
-                                        <th className="py-3 px-3">Pos</th>
-                                        <th className="py-3 px-3">Équipe</th>
-                                        <th className="py-3 px-3 text-center">
-                                            MJ
-                                        </th>
-                                        <th className="py-3 px-3 text-center">
-                                            V
-                                        </th>
-                                        <th className="py-3 px-3 text-center">
-                                            D
-                                        </th>
-                                        <th className="py-3 px-3 text-right">
-                                            Pts
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100">
-                                    {team.ranking.map((row) => (
-                                        <tr
-                                            key={row.position}
-                                            className={
-                                                row.isCurrentTeam
-                                                    ? "bg-pink-50/60 font-bold text-black-fleury"
-                                                    : "hover:bg-slate-50"
-                                            }
-                                        >
-                                            <td className="py-3 px-3 font-bold">
-                                                {row.position}
-                                            </td>
-                                            <td className="py-3 px-3 flex items-center gap-2">
-                                                {row.team}
-                                                {row.isCurrentTeam && (
-                                                    <Badge className="bg-pink-fleury text-black-fleury text-[9px] py-0 px-1.5">
-                                                        Mon Club
-                                                    </Badge>
-                                                )}
-                                            </td>
-                                            <td className="py-3 px-3 text-center">
-                                                {row.played}
-                                            </td>
-                                            <td className="py-3 px-3 text-center text-emerald-600 font-bold">
-                                                {row.won}
-                                            </td>
-                                            <td className="py-3 px-3 text-center text-rose-600 font-bold">
-                                                {row.lost}
-                                            </td>
-                                            <td className="py-3 px-3 text-right font-black">
-                                                {row.points}
-                                            </td>
+                        {rankingLoading ? (
+                            <div className="flex justify-center py-12">
+                                <Loader2 className="h-6 w-6 animate-spin text-pink-fleury" />
+                            </div>
+                        ) : rankingError ? (
+                            <p className="text-rose-600 font-bold text-center py-8">
+                                {rankingError}
+                            </p>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left text-xs sm:text-sm">
+                                    <thead>
+                                        <tr className="border-b border-gray-200 text-gray-400 uppercase text-[10px] tracking-wider">
+                                            <th className="py-3 px-3">Pos</th>
+                                            <th className="py-3 px-3">
+                                                Équipe
+                                            </th>
+                                            <th className="py-3 px-3 text-center">
+                                                MJ
+                                            </th>
+                                            <th className="py-3 px-3 text-center">
+                                                V
+                                            </th>
+                                            <th className="py-3 px-3 text-center">
+                                                D
+                                            </th>
+                                            <th className="py-3 px-3 text-right">
+                                                Pts
+                                            </th>
+                                            <th className="py-3 px-3 text-center">
+                                                PM
+                                            </th>
+                                            <th className="py-3 px-3 text-center">
+                                                PE
+                                            </th>
+                                            <th className="py-3 px-3 text-center">
+                                                Diff
+                                            </th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-100">
+                                        {ranking.map((row) => (
+                                            <tr
+                                                key={row.position}
+                                                className={
+                                                    row.isCurrentTeam
+                                                        ? "bg-pink-50/60 font-bold text-black-fleury"
+                                                        : "hover:bg-slate-50"
+                                                }
+                                            >
+                                                <td className="py-3 px-3 font-bold">
+                                                    {row.position}
+                                                </td>
+                                                <td className="py-3 px-3 flex items-center gap-2">
+                                                    {row.team}
+                                                    {row.isCurrentTeam && (
+                                                        <Badge className="bg-pink-fleury text-black-fleury text-[9px] py-0 px-1.5">
+                                                            Mon Club
+                                                        </Badge>
+                                                    )}
+                                                </td>
+                                                <td className="py-3 px-3 text-center">
+                                                    {row.played}
+                                                </td>
+                                                <td className="py-3 px-3 text-center text-emerald-600 font-bold">
+                                                    {row.won}
+                                                </td>
+                                                <td className="py-3 px-3 text-center text-rose-600 font-bold">
+                                                    {row.lost}
+                                                </td>
+                                                <td className="py-3 px-3 text-right font-black">
+                                                    {row.points}
+                                                </td>
+                                                <td className="py-3 px-3 text-center text-gray-500">
+                                                    {row.pointsFor}
+                                                </td>
+                                                <td className="py-3 px-3 text-center text-gray-500">
+                                                    {row.pointsAgainst}
+                                                </td>
+                                                <td className="py-3 px-3 text-center font-medium">
+                                                    {row.pointsDiff > 0
+                                                        ? `+${row.pointsDiff}`
+                                                        : row.pointsDiff}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
@@ -404,5 +442,4 @@ function TeamDetailPage({ teamId }: TeamDetailPageProps) {
 }
 
 export default TeamDetailPage;
-
 
