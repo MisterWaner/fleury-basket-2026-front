@@ -32,3 +32,8 @@ export interface Match {
     scoreHome?: number;
     scoreAway?: number;
 }
+
+export interface FormatMatchOptions {
+    teamName?: string;
+    teamCategory?: TeamCategory
+}

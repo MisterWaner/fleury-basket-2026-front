@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import PocketBase, { ClientResponseError } from "pocketbase";
-import type { TeamCategory } from "../types/teamCategory";
+import { formatMatchRecordToMatch } from "../helpers/formatMatch";
+import { parseFrenchDateString } from "@/helpers/parseFrenchDateString";
 import type { MatchRecord, Match } from "../types/match";
-import { normalizeCategory } from "../helpers/normalizeCategory";
 
 const pbUrl = import.meta.env.PUBLIC_POCKETBASE_URL || "http://127.0.0.1:8090";
 console.log("🔗 URL PocketBase configurée :", pbUrl);
@@ -39,89 +39,10 @@ export function useMatches() {
 
                 if (!isMounted) return;
 
-                const formattedMatches: Match[] = (records || []).map(
-                    (record) => {
-                        // Analyse de la date textuelle (ex: "1 nov. 10h00")
-                        const rawDate = record.date || "";
-                        const parts = rawDate.split(" ");
-                        const dayNum = parts[0] || "";
-                        const monthStr = parts[1] || "";
-                        const timeStr = parts[2] || "10h00";
+                const sortedRecords = [...(records || [])].sort((a, b) => parseFrenchDateString(a.date) - parseFrenchDateString(b.date));
 
-                        // Reconstitution propre pour l'affichage
-                        const formattedDate = `${dayNum} ${monthStr} 2026`;
-                        const formattedTime = timeStr.replace("h", ":");
-
-                        // Détermination des noms des équipes selon isHome
-                        const teamName = "FLEURY BASKET"; // Nom de ton club
-                        const opponent = record.opponent;
-                        const homeTeam = record.isHome
-                            ? teamName
-                            : opponent;
-                        const awayTeam = record.isHome
-                            ? opponent
-                            : teamName;
-
-
-                        // Gestion des scores
-                        const scoreHome =
-                            typeof record.homeScore === "number" &&
-                            record.homeScore > 0
-                                ? record.homeScore
-                                : undefined;
-                        const scoreAway =
-                            typeof record.awayScore === "number" &&
-                            record.awayScore > 0
-                                ? record.awayScore
-                                : undefined;
-
-                        let location =
-                            "Gymnase Auguste Delaune, Fleury-Sur-Orne";
-                        if (!record.isHome) {
-                            location = "A l'extérieur (salle de l'adversaire)";
-                        }
-
-                        const linkedTeamName =
-                            record.expand?.team?.name || "FLEURY BASKET";
-                        const linkedTeamCategory = record.expand?.team?.category;
-
-                        // Normalisation précise de la catégorie
-                        const category = normalizeCategory(
-                            linkedTeamName,
-                            linkedTeamCategory,
-                        );
-
-                        console.log(
-                            "Nom équipe:",
-                            record.expand?.team?.name,
-                            "| Catégorie BDD:",
-                            record.expand?.team?.category,
-                        );
-
-                        console.log("🔍 Match brut :", {
-                            rawRecord: record,
-                            hasExpand: !!record.expand,
-                            teamField: record.team,
-                        });
-
-                        return {
-                            id: record.id,
-                            category,
-                            opponent,
-                            homeTeam,
-                            awayTeam,
-                            date: formattedDate,
-                            time: formattedTime,
-                            location: location,
-                            isHome: record.isHome,
-                            status:
-                                record.status === "FINISHED"
-                                    ? "completed"
-                                    : "upcoming",
-                            scoreHome,
-                            scoreAway,
-                        };
-                    },
+                const formattedMatches: Match[] = sortedRecords.map(
+                    (record) => formatMatchRecordToMatch(record),
                 );
 
                 console.log(
@@ -156,6 +77,5 @@ export function useMatches() {
 
     return { matches, loading, error };
 }
-
 
 

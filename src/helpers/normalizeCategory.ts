@@ -1,7 +1,12 @@
 import type { TeamCategory } from "../types/teamCategory";
-export function normalizeCategory(linkedTeamName?: string, linkedTeamCategory?: string): TeamCategory {
+
+export function normalizeCategory(
+    linkedTeamName?: string,
+    linkedTeamCategory?: string,
+): TeamCategory {
     // On combine le nom et la catégorie pour couvrir tous les cas
-    const textToTest = `${linkedTeamName || ""} ${linkedTeamCategory || ""}`.toUpperCase();
+    const textToTest =
+        `${linkedTeamName || ""} ${linkedTeamCategory || ""}`.toUpperCase();
 
     if (textToTest.includes("U13") || textToTest.includes("U-13")) return "U13";
     if (textToTest.includes("U11") || textToTest.includes("U-11")) return "U11";

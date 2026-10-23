@@ -47,7 +47,7 @@ function Footer() {
                                 aria-label="Facebook"
                                 render={
                                     <a
-                                        href="https://facebook.com"
+                                        href="https://www.facebook.com/FleurySurOrneBasket"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     />
@@ -62,7 +62,7 @@ function Footer() {
                                 aria-label="Instagram"
                                 render={
                                     <a
-                                        href="https://instagram.com"
+                                        href="https://www.instagram.com/fleury_sur_orne_basket/"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     />
@@ -214,3 +214,5 @@ function Footer() {
 }
 
 export default Footer;
+
+
