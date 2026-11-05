@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTeamDetails } from "@/hooks/useTeamDetails";
+import { useTeamPlayers } from "@/hooks/useTeamPlayers";
 import { useRanking } from "@/hooks/useRanking";
 import {
     Trophy,
@@ -14,6 +15,7 @@ import {
     UserCheck,
     Loader2,
 } from "lucide-react";
+import PlayerCard from "@/components/Teams/PlayerCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { TeamDetailPageProps } from "@/types/teams";
@@ -32,6 +34,11 @@ function TeamDetailPage({ teamId }: TeamDetailPageProps) {
         loading: rankingLoading,
         error: rankingError,
     } = useRanking(teamId);
+    const {
+        players,
+        loading: playersLoading,
+        error: playersError,
+    } = useTeamPlayers(teamId);
 
     if (loading) {
         return (
@@ -256,27 +263,35 @@ function TeamDetailPage({ teamId }: TeamDetailPageProps) {
                             Effectif Joueurs
                         </h2>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {team.roster.map((player) => (
-                                <div
-                                    key={player.number}
-                                    className="p-4 bg-slate-50 rounded-2xl border border-gray-100 flex items-center gap-4"
-                                >
-                                    <div className="w-12 h-12 bg-black-fleury text-pink-fleury rounded-xl flex items-center justify-center font-black text-lg shrink-0">
-                                        #{player.number}
-                                    </div>
-                                    <div>
-                                        <h3 className="font-extrabold text-black-fleury text-sm sm:text-base">
-                                            {player.name}
-                                        </h3>
-                                        <p className="text-xs text-gray-500 font-medium">
-                                            {player.position}
-                                        </p>
-                                    </div>
+                        
+                            {playersLoading ? (
+                                <div className="flex justify-center py-12">
+                                    <Loader2 className="h-8 w-8 animate-spin text-pink-fleury" />
                                 </div>
+                            ) : playersError ? (
+                                <p className="text-red-500 text-center py-8">
+                                    {playersError}
+                                </p>
+                            ) : players.length > 0 ? (
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+                                    {players.map((player) => (
+                                        <PlayerCard
+                                            key={player.id}
+                                            player={player}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-center py-8">
+                                    Aucun joueur trouvé.
+                                </p>
+                            )}
+
+                            {team.roster.map((player) => (
+                                <PlayerCard key={player.id} player={player} />
                             ))}
                         </div>
-                    </div>
+                    
                 )}
 
                 {/* 3. LISTE DES MATCHS */}

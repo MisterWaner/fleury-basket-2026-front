@@ -1,6 +1,10 @@
 export interface Player {
-    number: number;
+    id: string;
     name: string;
-    position: string;
+    number?: number;
+    position?: string | string[];
+    photo?: string;
+    team: string;
 }
+
 
