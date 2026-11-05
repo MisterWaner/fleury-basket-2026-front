@@ -20,7 +20,10 @@ function Footer() {
                             className="flex items-center gap-3 group w-fit"
                         >
                             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-pink-fleury border border-gray-fleury shadow-xs transition-transform group-hover:scale-105">
-                                <Trophy className="h-5 w-5 text-black-fleury" />
+                                <img
+                                    src="/fleury-basket.png"
+                                    className="flex h-full w-full object-contain"
+                                />
                             </div>
                             <div className="flex flex-col">
                                 <span className="font-extrabold text-lg tracking-tight leading-none text-white group-hover:text-pink-fleury transition-colors">
@@ -214,5 +217,6 @@ function Footer() {
 }
 
 export default Footer;
+
 
 

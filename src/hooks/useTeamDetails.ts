@@ -59,18 +59,37 @@ export function useTeamDetails(teamId: string) {
                       ];
 
                 const upCommingRecords = (records || []).filter(
-                    (record) => record.status?.toUpperCase() !== "FINISHED"
+                    (record) => record.status?.toUpperCase() !== "FINISHED",
                 );
 
                 const sortedAllRecords = [...(records || [])].sort((a, b) => {
-                    return parseFrenchDateString(a.date) - parseFrenchDateString(b.date);
+                    return (
+                        parseFrenchDateString(a.date) -
+                        parseFrenchDateString(b.date)
+                    );
                 });
 
-                const allMatches = sortedAllRecords.map((record) => formatMatchRecordToMatch(record, { teamName: teamData.name, teamCategory: teamData.category }));
+                const allMatches = sortedAllRecords.map((record) =>
+                    formatMatchRecordToMatch(record, {
+                        teamName: teamData.name,
+                        teamCategory: teamData.category,
+                    }),
+                );
 
-                const sortedUpCommingRecords = [...upCommingRecords].sort((a, b) => parseFrenchDateString(a.date) - parseFrenchDateString(b.date)).slice(0, 4);
+                const sortedUpCommingRecords = [...upCommingRecords]
+                    .sort(
+                        (a, b) =>
+                            parseFrenchDateString(a.date) -
+                            parseFrenchDateString(b.date),
+                    )
+                    .slice(0, 4);
 
-                const recentMatches = sortedUpCommingRecords.map((record) => formatMatchRecordToMatch(record, { teamName: teamData.name, teamCategory: teamData.category }));
+                const recentMatches = sortedUpCommingRecords.map((record) =>
+                    formatMatchRecordToMatch(record, {
+                        teamName: teamData.name,
+                        teamCategory: teamData.category,
+                    }),
+                );
 
                 setTeam({
                     id: teamData.id,
@@ -110,6 +129,4 @@ export function useTeamDetails(teamId: string) {
         error,
     };
 }
-
-
 

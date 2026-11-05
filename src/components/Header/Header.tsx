@@ -9,6 +9,7 @@ import {
     type LucideIcon,
 } from "lucide-react";
 
+
 import { Button } from "@/components/ui/button";
 import {
     Sheet,
@@ -35,14 +36,14 @@ function Header() {
             {/* Bandeau supérieur aux couleurs du club */}
             <div className="h-1.5 w-full bg-linear-to-r from-pink-fleury via-gray-fleury to-pink-fleury" />
 
-            <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
+            <div className="container mx-auto flex h-31 items-center justify-between px-4 sm:px-6">
                 {/* --- LOGO DU CLUB (Protections shrink-0 et whitespace-nowrap ajoutées) --- */}
                 <a
                     href="/"
                     className="flex items-center gap-2.5 shrink-0 group"
                 >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pink-fleury border border-gray-fleury shadow-xs transition-transform group-hover:scale-105">
-                        <Trophy className="h-5 w-5 text-black-fleury shrink-0" />
+                    <div className="flex h-25 w-25 shrink-0 items-center justify-center rounded-full bg-pink-fleury border border-gray-fleury shadow-xs transition-transform group-hover:scale-105">
+                        <img src="/fleury-basket.png" className="flex h-full w-full object-contain" />
                     </div>
                     <div className="flex flex-col whitespace-nowrap">
                         <span className="font-extrabold text-base sm:text-lg tracking-tight leading-none text-club-dark group-hover:text-gray-fleury transition-colors">
