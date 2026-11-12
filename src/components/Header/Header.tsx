@@ -21,11 +21,12 @@ import {
 
 const navLinks: { name: string; href: string; icon: LucideIcon }[] = [
     { name: "Accueil", href: "/", icon: Trophy },
+    { name: "Le Club", href: "/club", icon: Trophy },
     { name: "Équipes", href: "/equipes", icon: Users },
     { name: "Calendrier & Matchs", href: "/calendrier", icon: Calendar },
     { name: "Actualités", href: "/actualites", icon: Newspaper },
-    { name: "Contact", href: "/contact", icon: Mail },
     { name: "Nos Partenaires", href: "/nos-partenaires", icon: Trophy },
+    { name: "Contact", href: "/contact", icon: Mail },
 ];
 
 function Header() {

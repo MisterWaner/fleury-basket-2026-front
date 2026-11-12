@@ -385,6 +385,9 @@ function TeamDetailPage({ teamId }: TeamDetailPageProps) {
                                             <th className="py-3 px-3 text-center">
                                                 D
                                             </th>
+                                            <th className="py-3 px-3 text-center">
+                                                PEN
+                                            </th>
                                             <th className="py-3 px-3 text-right">
                                                 Pts
                                             </th>
@@ -428,6 +431,9 @@ function TeamDetailPage({ teamId }: TeamDetailPageProps) {
                                                 </td>
                                                 <td className="py-3 px-3 text-center text-rose-600 font-bold">
                                                     {row.lost}
+                                                </td>
+                                                <td className="py-3 px-3 text-center font-black">
+                                                    {row.penalties}
                                                 </td>
                                                 <td className="py-3 px-3 text-right font-black">
                                                     {row.points}

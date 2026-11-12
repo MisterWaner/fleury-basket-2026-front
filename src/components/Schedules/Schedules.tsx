@@ -126,18 +126,29 @@ function Schedules() {
                 ) : filteredMatches.length > 0 ? (
                     <div className="space-y-4">
                         {filteredMatches.map((match) => {
+                            const scoreHome = match.scoreHome ?? 0;
+                            const scoreAway = match.scoreAway ?? 0;
+
+                            const isFleuryHomeWin =
+                                match.isHome && scoreHome > scoreAway;
+                            const isFleuryAwayWin =
+                                !match.isHome && scoreAway > scoreHome;
+
+                            const isHomeWinner =
+                                match.status === "completed" &&
+                                scoreHome > scoreAway;
+                            const isAwayWinner =
+                                match.status === "completed" &&
+                                scoreAway > scoreHome;
+
                             const isFleuryWinner =
                                 match.status === "completed" &&
-                                ((match.homeTeam
-                                    .toLowerCase()
-                                    .includes("fleury") &&
-                                    (match.scoreHome ?? 0) >
-                                        (match.scoreAway ?? 0)) ||
-                                    (match.awayTeam
-                                        .toLowerCase()
-                                        .includes("fleury") &&
-                                        (match.scoreAway ?? 0) >
-                                            (match.scoreHome ?? 0)));
+                                (isFleuryHomeWin || isFleuryAwayWin);
+
+                            const isFleuryLoser =
+                                match.status === "completed" &&
+                                ((match.isHome && scoreHome < scoreAway) ||
+                                    (!match.isHome && scoreAway < scoreHome));
 
                             return (
                                 <div
@@ -175,9 +186,32 @@ function Schedules() {
 
                                         <div className="shrink-0 bg-slate-100 px-4 py-2 rounded-xl text-center min-w-22.5 border border-gray-200">
                                             {match.status === "completed" ? (
-                                                <div className="text-lg sm:text-xl font-black text-black-fleury tracking-tight">
-                                                    {match.scoreHome} -{" "}
-                                                    {match.scoreAway}
+                                                <div className="text-lg sm:text-xl font-black tracking-tight flex items-center justify-center gap-1">
+                                                    <span
+                                                        className={
+                                                            isHomeWinner
+                                                                ? "text-emerald-600"
+                                                                : isAwayWinner
+                                                                  ? "text-red-600"
+                                                                  : "text-black-fleury"
+                                                        }
+                                                    >
+                                                        {scoreHome}
+                                                    </span>
+                                                    <span className="text-gray-400">
+                                                        -
+                                                    </span>
+                                                    <span
+                                                        className={
+                                                            isAwayWinner
+                                                                ? "text-emerald-600"
+                                                                : isHomeWinner
+                                                                  ? "text-red-600"
+                                                                  : "text-black-fleury"
+                                                        }
+                                                    >
+                                                        {scoreAway}
+                                                    </span>
                                                 </div>
                                             ) : (
                                                 <div className="flex items-center justify-center gap-1 text-sm font-bold text-black-fleury">
@@ -209,12 +243,21 @@ function Schedules() {
                                             </span>
                                         </div>
 
-                                        {match.status === "completed" &&
-                                            isFleuryWinner && (
-                                                <Badge className="bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold shrink-0">
-                                                    Victoire
-                                                </Badge>
-                                            )}
+                                        {/* --- BADGE DE VICTOIRE OU DÉFAITE --- */}
+                                        {match.status === "completed" && (
+                                            <>
+                                                {isFleuryWinner && (
+                                                    <Badge className="bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold shrink-0">
+                                                        Victoire
+                                                    </Badge>
+                                                )}
+                                                {isFleuryLoser && (
+                                                    <Badge className="bg-red-100 text-red-800 border border-red-200 font-bold shrink-0">
+                                                        Défaite
+                                                    </Badge>
+                                                )}
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             );

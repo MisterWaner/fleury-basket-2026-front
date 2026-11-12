@@ -15,6 +15,7 @@ export function formatRankingRecordToRankingItem(record: RankingRecord): Ranking
         won: record.won ?? 0,
         lost: record.lost ?? 0,
         points: record.points ?? 0,
+        penalties: record.penalties ?? 0,
         pointsFor,
         pointsAgainst,
         pointsDiff: calculatedDiff,

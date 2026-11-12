@@ -8,6 +8,7 @@ export interface RankingRecord {
     won: number;
     lost: number;
     points: number;
+    penalties: number;
     pointsFor: number;
     pointsAgainst: number;
     pointsDiff: number;
@@ -24,6 +25,7 @@ export interface RankingItem {
     won: number;
     lost: number;
     points: number;
+    penalties: number;
     pointsFor: number;
     pointsAgainst: number;
     pointsDiff: number;
