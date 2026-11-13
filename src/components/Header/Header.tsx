@@ -1,5 +1,7 @@
 import { useState } from "react";
 import {
+    BicepsFlexed,
+    House,
     Menu,
     Trophy,
     Calendar,
@@ -20,12 +22,12 @@ import {
 } from "@/components/ui/sheet";
 
 const navLinks: { name: string; href: string; icon: LucideIcon }[] = [
-    { name: "Accueil", href: "/", icon: Trophy },
+    { name: "Accueil", href: "/", icon: House },
     { name: "Le Club", href: "/club", icon: Trophy },
     { name: "Équipes", href: "/equipes", icon: Users },
     { name: "Calendrier & Matchs", href: "/calendrier", icon: Calendar },
     { name: "Actualités", href: "/actualites", icon: Newspaper },
-    { name: "Nos Partenaires", href: "/nos-partenaires", icon: Trophy },
+    { name: "Nos Partenaires", href: "/nos-partenaires", icon: BicepsFlexed },
     { name: "Contact", href: "/contact", icon: Mail },
 ];
 

@@ -81,7 +81,7 @@ function NextMatchCard({ nextMatch, loading, error }: NextMatchCardProps) {
                                 <span className="font-extrabold text-sm text-gray-700 leading-tight">
                                     {nextMatch.isHome
                                         ? nextMatch.opponent
-                                        : nextMatch.homeTeam.toUpperCase()}
+                                        : nextMatch.awayTeam.toUpperCase()}
                                 </span>
                             </div>
                         </div>

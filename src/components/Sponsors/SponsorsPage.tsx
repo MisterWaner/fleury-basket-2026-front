@@ -1,6 +1,9 @@
+import SponsorCard from "./SponsorCard";
+import { usePartners } from "@/hooks/usePartners";
 import {
     Building2,
     Handshake,
+    Loader2,
     Award,
     ExternalLink,
     CheckCircle2,
@@ -13,72 +16,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { Partner } from "@/types/partner";
-
-const partnersList: Partner[] = [
-    // Institutionnels
-    {
-        id: "1",
-        name: "Ville de Fleury-sur-Orne",
-        category: "institutionnel",
-        description:
-            "Partenaire institutionnel principal du club et mise à disposition des infrastructures.",
-        logoUrl: "/images/sponsors/fleury-sur-orne.png",
-        websiteUrl: "https://www.fleurysurorne.fr",
-    },
-    {
-        id: "2",
-        name: "Département du Calvados",
-        category: "institutionnel",
-        description:
-            "Soutien au développement du sport amateur et à la formation des jeunes.",
-        logoUrl: "/images/sponsors/calvados.png",
-        websiteUrl: "https://www.calvados.fr",
-    },
-    {
-        id: "3",
-        name: "Région Normandie",
-        category: "institutionnel",
-        description:
-            "Soutien aux associations sportives régionales et au dispositif Atouts Normandie.",
-        logoUrl: "/images/sponsors/normandie.png",
-        websiteUrl: "https://www.normandie.fr",
-    },
-    // Partenaires Majeurs / Officiels
-    {
-        id: "4",
-        name: "Intersport Caen",
-        category: "majeur",
-        description:
-            "Équipementier officiel du Fleury Basket pour le textile et le matériel d'entraînement.",
-        logoUrl: "/images/sponsors/intersport.png",
-        websiteUrl: "https://www.intersport.fr",
-    },
-    {
-        id: "5",
-        name: "Crédit Agricole Normandie",
-        category: "majeur",
-        description:
-            "Partenaire majeur engagé auprès des équipes de jeunes et de la vie associative.",
-        logoUrl: "/images/sponsors/credit-agricole.png",
-        websiteUrl: "https://www.credit-agricole.fr",
-    },
-    {
-        id: "6",
-        name: "Super U Fleury-sur-Orne",
-        category: "officiel",
-        description:
-            "Fournisseur des goûters et réceptions d'après-match lors des week-ends de compétition.",
-        logoUrl: "/images/sponsors/super-u.png",
-    },
-    {
-        id: "7",
-        name: "Boulangerie Artisanale Fleury",
-        category: "local",
-        description:
-            "Commerçant local engagé pour le soutien des manifestations du club.",
-        logoUrl: "/images/sponsors/boulangerie.png",
-    },
-];
 
 const packages = [
     {
@@ -119,6 +56,7 @@ const packages = [
 ];
 
 function SponsorsPage() {
+    const { partners, loading, error } = usePartners();
     return (
         <div className="bg-slate-50 min-h-screen py-8 sm:py-12">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -142,106 +80,56 @@ function SponsorsPage() {
                 </div>
 
                 {/* --- SECTION PARTENAIRES INSTITUTIONNELS --- */}
-                <div className="mb-16">
-                    <h2 className="text-xl font-extrabold text-black-fleury mb-6 flex items-center gap-2">
-                        <Building2 className="h-5 w-5 text-pink-fleury" />
-                        Partenaires Institutionnels
-                    </h2>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {partnersList
-                            .filter((p) => p.category === "institutionnel")
-                            .map((partner) => (
-                                <div
-                                    key={partner.id}
-                                    className="bg-white rounded-3xl border border-gray-200/90 p-6 shadow-2xs flex flex-col justify-between hover:shadow-md transition-all duration-300"
-                                >
-                                    <div>
-                                        <div className="h-20 bg-slate-50 rounded-2xl p-4 flex items-center justify-center mb-5 border border-gray-100">
-                                            {/* Placeholder si pas de logo / remplacer par img */}
-                                            <span className="font-extrabold text-slate-700 text-base text-center">
-                                                {partner.name}
-                                            </span>
-                                        </div>
-                                        <h3 className="font-extrabold text-black-fleury text-base mb-2">
-                                            {partner.name}
-                                        </h3>
-                                        <p className="text-xs text-gray-600 leading-relaxed mb-4">
-                                            {partner.description}
-                                        </p>
-                                    </div>
-
-                                    {partner.websiteUrl && (
-                                        <a
-                                            href={partner.websiteUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-1.5 text-xs font-bold text-black-fleury hover:text-pink-fleury transition-colors pt-2 border-t border-gray-100"
-                                        >
-                                            <span>Visiter le site web</span>
-                                            <ExternalLink className="h-3.5 w-3.5" />
-                                        </a>
-                                    )}
-                                </div>
-                            ))}
+                {loading ? (
+                    <div className="flex justify-center py-12">
+                        <Loader2 className="h-8 w-8 animate-spin text-pink-fleury" />
                     </div>
-                </div>
+                ) : error ? (
+                    <p className="text-red-500 text-center py-8">{error}</p>
+                ) : partners.length > 0 ? (
+                    <>
+                        <div className="mb-16">
+                            <h2 className="text-xl font-extrabold text-black-fleury mb-6 flex items-center gap-2">
+                                <Building2 className="h-5 w-5 text-pink-fleury" />
+                                Partenaires Institutionnels
+                            </h2>
 
-                {/* --- SECTION SPONSORS & ENTREPRISES --- */}
-                <div className="mb-20">
-                    <h2 className="text-xl font-extrabold text-black-fleury mb-6 flex items-center gap-2">
-                        <Handshake className="h-5 w-5 text-pink-fleury" />
-                        Sponsors & Partenaires Privés
-                    </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {partners
+                                    .filter(
+                                        (p) => p.category === "institutionnel",
+                                    )
+                                    .map((partner) => (
+                                        <SponsorCard
+                                            key={partner.id}
+                                            partner={partner}
+                                        />
+                                    ))}
+                            </div>
+                        </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {partnersList
-                            .filter((p) => p.category !== "institutionnel")
-                            .map((partner) => (
-                                <div
-                                    key={partner.id}
-                                    className="bg-white rounded-3xl border border-gray-200/90 p-6 shadow-2xs flex flex-col justify-between hover:shadow-md transition-all duration-300"
-                                >
-                                    <div>
-                                        <div className="h-20 bg-slate-50 rounded-2xl p-4 flex items-center justify-center mb-4 border border-gray-100">
-                                            <span className="font-bold text-slate-700 text-sm text-center">
-                                                {partner.name}
-                                            </span>
-                                        </div>
-                                        <div className="mb-2">
-                                            <Badge
-                                                className={`text-[10px] font-bold border-none ${
-                                                    partner.category ===
-                                                    "majeur"
-                                                        ? "bg-pink-fleury text-black-fleury"
-                                                        : "bg-slate-100 text-black-fleury"
-                                                }`}
-                                            >
-                                                {partner.category === "majeur"
-                                                    ? "Partenaire Majeur"
-                                                    : "Partenaire Officiel"}
-                                            </Badge>
-                                        </div>
-                                        <p className="text-xs text-gray-600 leading-relaxed mb-4">
-                                            {partner.description}
-                                        </p>
-                                    </div>
+                        {/* --- SECTION SPONSORS & ENTREPRISES --- */}
+                        <div className="mb-20">
+                            <h2 className="text-xl font-extrabold text-black-fleury mb-6 flex items-center gap-2">
+                                <Handshake className="h-5 w-5 text-pink-fleury" />
+                                Sponsors & Partenaires Privés
+                            </h2>
 
-                                    {partner.websiteUrl && (
-                                        <a
-                                            href={partner.websiteUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-1.5 text-xs font-bold text-black-fleury hover:text-pink-fleury transition-colors pt-2 border-t border-gray-100"
-                                        >
-                                            <span>Voir le site</span>
-                                            <ExternalLink className="h-3.5 w-3.5" />
-                                        </a>
-                                    )}
-                                </div>
-                            ))}
-                    </div>
-                </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                {partners
+                                    .filter(
+                                        (p) => p.category !== "institutionnel",
+                                    )
+                                    .map((partner) => (
+                                        <SponsorCard
+                                            key={partner.id}
+                                            partner={partner}
+                                        />
+                                    ))}
+                            </div>
+                        </div>
+                    </>
+                ) : null}
 
                 {/* --- SECTION : DEVENIR PARTENAIRE / PACKAGES --- */}
                 <div className="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 mb-16 relative overflow-hidden">
@@ -276,7 +164,7 @@ function SponsorsPage() {
                                         <span
                                             className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${
                                                 pkg.highlight
-                                                ? "bg-pink-fleury/30 text-black-fleury"
+                                                    ? "bg-pink-fleury/30 text-black-fleury"
                                                     : "bg-slate-700 text-gray-300"
                                             }`}
                                         >
